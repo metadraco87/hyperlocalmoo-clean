@@ -6,9 +6,7 @@ const config = {
   preprocess: vitePreprocess(),
 
   kit: {
-    adapter: adapter({
-      runtime: 'nodejs18.x' // ✅ Lock to supported Node version
-    })
+    adapter: adapter()
   }
 };
 
