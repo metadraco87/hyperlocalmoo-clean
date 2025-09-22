@@ -1,15 +1,16 @@
 {
-  "name": "hyperlocalmoo-lambda",
+  "name": "hyperlocalmoo-frontend",
   "version": "1.0.0",
-  "description": "HyperLocal Moo Lambda Function",
-  "main": "index.js",
   "scripts": {
-    "start": "node index.js"
+    "dev": "vite dev",
+    "build": "vite build",
+    "preview": "vite preview"
   },
   "dependencies": {
-    "cors": "^2.8.5",
-    "dotenv": "^16.6.1",
-    "express": "^4.21.2",
-    "serverless-http": "^3.2.0"
+    "@sveltejs/kit": "latest",
+    "svelte": "latest"
+  },
+  "devDependencies": {
+    "vite": "latest"
   }
 }
