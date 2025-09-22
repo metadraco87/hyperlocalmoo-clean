@@ -1,0 +1,42 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <link rel="icon" type="image/x-icon" href="/favicon.ico">
+    %sveltekit.head%
+
+
+    <meta http-equiv="Content-Security-Policy" content="
+        default-src 'self' data: blob: https:;
+        connect-src * data: blob:;
+        script-src 'self' https://maps.googleapis.com https://maps.gstatic.com https://cdnjs.cloudflare.com https://pagead2.googlesyndication.com 'unsafe-inline' 'unsafe-eval';
+        style-src 'self' 'unsafe-inline' https://cdnjs.cloudflare.com https://fonts.googleapis.com;
+        img-src * data: blob:;
+        font-src 'self' https://cdnjs.cloudflare.com https://fonts.gstatic.com;
+        frame-src 'self' https://googleads.g.doubleclick.net https://tpc.googlesyndication.com;
+    ">
+
+    <!-- Google AdSense -->
+    <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-3914949226055822"
+     crossorigin="anonymous"></script>
+
+    <script>
+        // This function will be called by Google Maps API once it's fully loaded.
+        // It provides access to window.google.maps and other APIs.
+        window.initMap = function() {
+            console.log('Global initMap callback fired. Google Maps API is ready.');
+            // We'll trigger initialization in the Svelte component when 'show' is true.
+        };
+    </script>
+
+    <script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyDUpKdilEw1-S4jwwT1C1qwBsgi_rUDPe8&libraries=places,marker&callback=initMap&v=beta&loading=async" async defer></script>
+    
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css" />
+</head>
+<body>
+    <div style="display: contents">
+        %sveltekit.body%
+    </div>
+</body>
+</html>

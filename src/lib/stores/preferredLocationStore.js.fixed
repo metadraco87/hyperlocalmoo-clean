@@ -1,0 +1,204 @@
+// Modified version with fallback for Vercel deployment
+import { writable, derived } from 'svelte/store';
+import { browser } from '$app/environment';
+
+// Safe import of environment variables with fallback
+let PUBLIC_MAPS_API_KEY;
+try {
+  // Try to import from environment
+  const env = await import('$env/static/public');
+  PUBLIC_MAPS_API_KEY = env.PUBLIC_MAPS_API_KEY;
+} catch (e) {
+  // Fallback for build-time when env vars might not be available
+  PUBLIC_MAPS_API_KEY = 'AIzaSyDUpKdilEw1-S4jwwT1C1qwBsgi_rUDPe8';
+  console.warn('Using fallback maps API key. Set PUBLIC_MAPS_API_KEY in environment variables.');
+}
+
+// Define NYC as the default/fallback location
+const initialFallbackLocation = {
+    name: 'New York, NY, USA',
+    lat: 40.7128,
+    lng: -74.0060,
+    zoom: 12,
+    bounds: null
+};
+
+// Initialize the store
+function createPreferredLocationStore() {
+    // Get stored location from localStorage if available
+    let storedLocation = null;
+    
+    if (browser) {
+        try {
+            const stored = localStorage.getItem('preferredLocation');
+            if (stored) {
+                storedLocation = JSON.parse(stored);
+            }
+        } catch (e) {
+            console.error('Error reading location from localStorage:', e);
+        }
+    }
+
+    // Use stored location or fallback
+    const initialLocation = storedLocation || initialFallbackLocation;
+    
+    // Create the writable store
+    const { subscribe, set, update } = writable(initialLocation);
+
+    return {
+        subscribe,
+        
+        // Set a new preferred location
+        setLocation: (location) => {
+            if (!location) return;
+            
+            // Update the store
+            set(location);
+            
+            // Save to localStorage if in browser
+            if (browser) {
+                try {
+                    localStorage.setItem('preferredLocation', JSON.stringify(location));
+                } catch (e) {
+                    console.error('Error saving location to localStorage:', e);
+                }
+            }
+        },
+        
+        // Reset to default
+        reset: () => {
+            set(initialFallbackLocation);
+            if (browser) {
+                try {
+                    localStorage.removeItem('preferredLocation');
+                } catch (e) {
+                    console.error('Error removing location from localStorage:', e);
+                }
+            }
+        }
+    };
+}
+
+// Create the store
+export const preferredLocation = createPreferredLocationStore();
+
+// Create a derived store for geocoding URLs
+export const geocodingUrl = derived(
+    preferredLocation,
+    $preferredLocation => {
+        // If location has exact coordinates, create the reverse geocoding URL
+        if ($preferredLocation && $preferredLocation.lat && $preferredLocation.lng) {
+            return `https://maps.googleapis.com/maps/api/geocode/json?latlng=${$preferredLocation.lat},${$preferredLocation.lng}&key=${PUBLIC_MAPS_API_KEY}`;
+        }
+        return null;
+    }
+);
+
+// Create a store for all places search results
+export const placesSearchResults = writable([]);
+
+// Function to fetch address details using the Google Geocoding API
+export async function fetchAddressDetails(lat, lng) {
+    try {
+        const response = await fetch(
+            `https://maps.googleapis.com/maps/api/geocode/json?latlng=${lat},${lng}&key=${PUBLIC_MAPS_API_KEY}`
+        );
+        
+        if (!response.ok) {
+            throw new Error('Network response was not ok');
+        }
+        
+        const data = await response.json();
+        
+        if (data.status !== 'OK') {
+            throw new Error(`Geocoding API error: ${data.status}`);
+        }
+        
+        return data.results;
+    } catch (error) {
+        console.error('Error fetching address details:', error);
+        return null;
+    }
+}
+
+// Function to get a place prediction from a text input
+export async function getPlacePredictions(input) {
+    if (!input || input.length < 3 || !browser) return [];
+    
+    try {
+        // Call the API on your server-side endpoint that wraps the Google Places API
+        const response = await fetch(`/api/places/autocomplete?input=${encodeURIComponent(input)}`);
+        
+        if (!response.ok) {
+            throw new Error('Network response was not ok');
+        }
+        
+        const data = await response.json();
+        
+        if (!data.predictions) {
+            return [];
+        }
+        
+        placesSearchResults.set(data.predictions);
+        return data.predictions;
+    } catch (error) {
+        console.error('Error getting place predictions:', error);
+        return [];
+    }
+}
+
+// Function to get place details from a place_id
+export async function getPlaceDetails(placeId) {
+    if (!placeId || !browser) return null;
+    
+    try {
+        // Call the API on your server-side endpoint that wraps the Google Places API
+        const response = await fetch(`/api/places/details?place_id=${encodeURIComponent(placeId)}`);
+        
+        if (!response.ok) {
+            throw new Error('Network response was not ok');
+        }
+        
+        const data = await response.json();
+        
+        if (!data.result) {
+            return null;
+        }
+        
+        return data.result;
+    } catch (error) {
+        console.error('Error getting place details:', error);
+        return null;
+    }
+}
+
+// Function to set the preferred location from a place_id
+export async function setLocationFromPlaceId(placeId) {
+    try {
+        const placeDetails = await getPlaceDetails(placeId);
+        
+        if (!placeDetails || !placeDetails.geometry || !placeDetails.geometry.location) {
+            throw new Error('Invalid place details');
+        }
+        
+        const location = {
+            name: placeDetails.formatted_address || placeDetails.name,
+            lat: placeDetails.geometry.location.lat,
+            lng: placeDetails.geometry.location.lng,
+            zoom: 13, // Default zoom level for searched locations
+            placeId: placeId,
+            bounds: placeDetails.geometry.viewport ? {
+                north: placeDetails.geometry.viewport.northeast.lat,
+                east: placeDetails.geometry.viewport.northeast.lng,
+                south: placeDetails.geometry.viewport.southwest.lat,
+                west: placeDetails.geometry.viewport.southwest.lng
+            } : null
+        };
+        
+        preferredLocation.setLocation(location);
+        return location;
+    } catch (error) {
+        console.error('Error setting location from place ID:', error);
+        return null;
+    }
+}

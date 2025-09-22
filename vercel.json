@@ -1,0 +1,32 @@
+{
+  "version": 2,
+  "buildCommand": "npm run build",
+  "devCommand": "npm run dev",
+  "installCommand": "npm install",
+  "framework": "sveltekit",
+  "regions": ["iad1"],
+  "routes": [
+    {
+      "src": "/api/(.*)",
+      "dest": "https://cgnrg0odf0.execute-api.us-east-1.amazonaws.com/default/api/$1"
+    },
+    {
+      "src": "/auth/(.*)",
+      "dest": "https://cgnrg0odf0.execute-api.us-east-1.amazonaws.com/default/auth/$1"
+    },
+    {
+      "handle": "filesystem"
+    },
+    {
+      "src": "/(.*)",
+      "dest": "/"
+    }
+  ],
+  "redirects": [
+    {
+      "source": "/(.*)",
+      "destination": "https://apexmoo.com/$1",
+      "permanent": true
+    }
+  ]
+}
