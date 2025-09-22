@@ -5,21 +5,14 @@
   "installCommand": "npm install",
   "framework": "sveltekit",
   "regions": ["iad1"],
-  "routes": [
+  "rewrites": [
     {
-      "src": "/api/(.*)",
-      "dest": "https://cgnrg0odf0.execute-api.us-east-1.amazonaws.com/default/api/$1"
+      "source": "/api/(.*)",
+      "destination": "https://cgnrg0odf0.execute-api.us-east-1.amazonaws.com/default/api/$1"
     },
     {
-      "src": "/auth/(.*)",
-      "dest": "https://cgnrg0odf0.execute-api.us-east-1.amazonaws.com/default/auth/$1"
-    },
-    {
-      "handle": "filesystem"
-    },
-    {
-      "src": "/(.*)",
-      "dest": "/"
+      "source": "/auth/(.*)",
+      "destination": "https://cgnrg0odf0.execute-api.us-east-1.amazonaws.com/default/auth/$1"
     }
   ],
   "redirects": [
