@@ -32,7 +32,7 @@ export const actions: Actions = {
 		const results = await db.select().from(table.user).where(eq(table.user.username, username));
 
 		const existingUser = results.at(0);
-		if (!existingUser) {
+		if (!existingUser || !existingUser.passwordHash) {
 			return fail(400, { message: 'Incorrect username or password' });
 		}
 

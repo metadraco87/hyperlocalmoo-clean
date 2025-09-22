@@ -26,12 +26,51 @@ export async function createSession(token: string, userId: string) {
 	return session;
 }
 
+export async function createUserFromGoogle(googleUser: {
+	id: string;
+	email: string;
+	name: string;
+	picture: string;
+}) {
+	const userId = generateUserId();
+	const user: Omit<table.User, 'passwordHash'> = {
+		id: userId,
+		googleId: googleUser.id,
+		email: googleUser.email,
+		name: googleUser.name,
+		picture: googleUser.picture,
+		username: googleUser.email.split('@')[0] + '_' + Date.now(),
+		age: null
+	};
+	await db.insert(table.user).values({
+		...user,
+		passwordHash: null
+	});
+	return user;
+}
+
+export async function getUserByGoogleId(googleId: string) {
+	const [user] = await db.select().from(table.user).where(eq(table.user.googleId, googleId));
+	return user || null;
+}
+
+export function generateUserId() {
+	const bytes = crypto.getRandomValues(new Uint8Array(16));
+	return encodeBase64url(bytes);
+}
+
 export async function validateSessionToken(token: string) {
 	const sessionId = encodeHexLowerCase(sha256(new TextEncoder().encode(token)));
 	const [result] = await db
 		.select({
 			// Adjust user table here to tweak returned data
-			user: { id: table.user.id, username: table.user.username },
+			user: {
+				id: table.user.id,
+				username: table.user.username,
+				email: table.user.email,
+				name: table.user.name,
+				picture: table.user.picture
+			},
 			session: table.session
 		})
 		.from(table.session)

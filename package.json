@@ -47,6 +47,9 @@
 		"vite": "^7.0.4"
 	},
 	"dependencies": {
-		"@node-rs/argon2": "^2.0.2"
+		"@lucia-auth/adapter-drizzle": "^1.1.0",
+		"@node-rs/argon2": "^2.0.2",
+		"@sveltejs/adapter-vercel": "^5.10.2",
+		"arctic": "^3.7.0"
 	}
 }
