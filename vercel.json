@@ -14,5 +14,5 @@
       "source": "/auth/(.*)",
       "destination": "https://cgnrg0odf0.execute-api.us-east-1.amazonaws.com/default/auth/$1"
     }
-  ],
+  ]
 }
