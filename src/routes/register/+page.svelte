@@ -80,7 +80,7 @@
     function handleOAuthLogin(provider) {
         if (!browser) return;
         if (provider === 'google') {
-            window.location.href = 'https://apexmoo.com/auth/google';
+            window.location.href = `${PUBLIC_API_BASE_URL}/auth/google`;
         } else {
             window.location.href = `${PUBLIC_API_BASE_URL}/auth/${provider}`;
         }
