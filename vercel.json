@@ -1,18 +1,24 @@
 {
-  "version": 2,
-  "buildCommand": "npm run build",
-  "devCommand": "npm run dev",
-  "installCommand": "npm install",
-  "framework": "sveltekit",
-  "regions": ["iad1"],
   "rewrites": [
+    { "source": "/api/(.*)", "destination": "/api/$1" }
+  ],
+  "headers": [
     {
-      "source": "/api/(.*)",
-      "destination": "https://cgnrg0odf0.execute-api.us-east-1.amazonaws.com/default/api/$1"
-    },
-    {
-      "source": "/auth/(.*)",
-      "destination": "https://cgnrg0odf0.execute-api.us-east-1.amazonaws.com/default/auth/$1"
+      "source": "/api/csp-violation-report",
+      "headers": [
+        {
+          "key": "Access-Control-Allow-Origin",
+          "value": "*"
+        },
+        {
+          "key": "Access-Control-Allow-Methods",
+          "value": "POST, OPTIONS"
+        },
+        {
+          "key": "Access-Control-Allow-Headers",
+          "value": "Content-Type"
+        }
+      ]
     }
   ]
 }

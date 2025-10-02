@@ -23,9 +23,10 @@
             }
         };
         
-        // Ensure initMap is available globally
+        // Ensure initMap is available globally and properly defined
         if (typeof window !== 'undefined') {
             window.initMap = window.initMap;
+            console.log('initMap function defined globally:', typeof window.initMap);
         }
     </script>
 
