@@ -113,7 +113,7 @@ export const handle: Handle = async ({ event, resolve }) => {
             "font-src 'self' https://cdnjs.cloudflare.com https://fonts.gstatic.com https://www.google.com;",
             isDev
                 ? "connect-src * data: blob:;"
-                : "connect-src 'self' http://localhost:4000 ws://localhost:4000 https://apexmoo.com https://maps.googleapis.com https://maps.gstatic.com https://places.googleapis.com https://*.googleapis.com https://*.google.com https://www.google-analytics.com https://google-analytics.com https://googletagmanager.com https://pagead2.googlesyndication.com https://www.googletagservices.com;",
+                : "connect-src 'self' http://localhost:4000 ws://localhost:4000 https://apexmoo.com https://maps.googleapis.com https://maps.gstatic.com https://places.googleapis.com https://*.googleapis.com https://*.google.com https://www.google-analytics.com https://google-analytics.com https://googletagmanager.com https://pagead2.googlesyndication.com https://www.googletagservices.com https://ep1.adtrafficquality.google;",
             "frame-src 'self' https://googleads.g.doubleclick.net https://tpc.googlesyndication.com https://www.google.com https://pagead2.googlesyndication.com;",
             "object-src 'none';",
             "media-src 'self' data: blob: https://*.amazonaws.com https://wallpapers.com https://*.wallpapers.com https://unsplash.com https://*.unsplash.com https://pexels.com https://*.pexels.com https://imgur.com https://*.imgur.com https://flickr.com https://*.flickr.com https://*.staticflickr.com https://pinterest.com https://*.pinterest.com https://*.pinimg.com https://google.com https://*.google.com https://*.googleusercontent.com https://*.ggpht.com https:;",
