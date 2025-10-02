@@ -112,10 +112,10 @@ export const handle: Handle = async ({ event, resolve }) => {
 
         const isDev = process.env.NODE_ENV !== 'production';
         
-        // Nonce-based strict CSP for AdSense
+        // Nonce-based CSP with fallback for external scripts
         const csp = [
             isDev ? "default-src 'self' data: blob: https:;" : "default-src 'self';",
-            `script-src 'nonce-${nonce}' 'unsafe-inline' 'unsafe-eval' 'strict-dynamic' https: http:;`,
+            `script-src 'nonce-${nonce}' 'unsafe-inline' 'unsafe-eval' https://maps.googleapis.com https://maps.gstatic.com https://cdnjs.cloudflare.com https://pagead2.googlesyndication.com https://www.googletagservices.com https://www.google.com https://www.google-analytics.com https://google-analytics.com https://googletagmanager.com https://ep2.adtrafficquality.google;`,
             "object-src 'none';",
             "base-uri 'none';",
             "style-src 'self' 'unsafe-inline' https://cdnjs.cloudflare.com https://fonts.googleapis.com https://www.google.com;",
