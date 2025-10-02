@@ -23,7 +23,8 @@ const config = {
           'https://www.google-analytics.com',
           'https://google-analytics.com',
           'https://googletagmanager.com',
-          'https://ep2.adtrafficquality.google'
+          'https://ep2.adtrafficquality.google',
+          'https://ep1.adtrafficquality.google'
         ],
         'frame-src': [
           'self',
