@@ -9,6 +9,7 @@ declare global {
 				email: string;
 				username: string;
 			} | null;
+			nonce: string;
 		}
 		// interface PageData {}
 		// interface PageState {}
