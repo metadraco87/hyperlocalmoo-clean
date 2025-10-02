@@ -17,8 +17,16 @@
         // It provides access to window.google.maps and other APIs.
         window.initMap = function() {
             console.log('Global initMap callback fired. Google Maps API is ready.');
-            // We'll trigger initialization in the Svelte component when 'show' is true.
+            // Dispatch a custom event to notify components that Maps is ready
+            if (typeof window !== 'undefined') {
+                window.dispatchEvent(new CustomEvent('googleMapsReady'));
+            }
         };
+        
+        // Ensure initMap is available globally
+        if (typeof window !== 'undefined') {
+            window.initMap = window.initMap;
+        }
     </script>
 
     <script nonce="%sveltekit.nonce%" src="https://maps.googleapis.com/maps/api/js?key=AIzaSyDUpKdilEw1-S4jwwT1C1qwBsgi_rUDPe8&libraries=places,marker&callback=initMap&v=beta&loading=async" async defer></script>

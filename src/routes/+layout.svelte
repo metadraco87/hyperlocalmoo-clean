@@ -35,27 +35,34 @@
 
     const currentPathname = $page.url.pathname;
     const currentSearchParams = $page.url.searchParams;
-    const publicPaths = ['/', '/login', '/register'];
-    const protectedPathsRequiringLogin = ['/posts', '/profile', '/create', '/posts/list'];
+    const publicPaths = ['/login', '/register', '/forgot-password', '/reset-password', '/verify-email'];
+    const protectedPathsRequiringLogin = ['/posts', '/profile', '/create', '/posts/list', '/concierge', '/admin'];
+    const redirectPaths = ['/']; // Paths that should redirect based on auth state
 
     console.log('Layout: Redirect Check - Active. isLoggedIn:', isLoggedIn, 'userLocationStatus:', userLocationStatus, 'currentPath:', currentPathname);
 
+    // Skip redirect logic for public paths
+    if (publicPaths.includes(currentPathname)) {
+      console.log('Layout: Public path detected, skipping redirect logic.');
+      return;
+    }
+
     if (!isLoggedIn) {
-      if (protectedPathsRequiringLogin.includes(currentPathname) || currentPathname === '/') {
+      if (protectedPathsRequiringLogin.includes(currentPathname) || redirectPaths.includes(currentPathname)) {
         console.log('Layout: Not logged in. Redirecting to /login.');
         await goto('/login', { replaceState: true });
       }
     } else { // Logged in
       if (!userLocationStatus) {
         const isPostsWithLocationSetup = currentPathname === '/posts' && currentSearchParams.get('showLocationSetup') === 'true';
-        if (currentPathname !== '/location-setup' && !isPostsWithLocationSetup) {
+        if (currentPathname !== '/location-setup' && !isPostsWithLocationSetup && !publicPaths.includes(currentPathname)) {
           console.log('Layout: Logged in but no valid location. Redirecting to /location-setup.');
           await goto('/location-setup', { replaceState: true });
         } else {
           console.log('Layout: Logged in, no location, but current path is /location-setup or /posts with overlay param. Skipping redirect.');
         }
       } else { // Logged in and location is set
-        if (publicPaths.includes(currentPathname) || currentPathname === '/location-setup') {
+        if (redirectPaths.includes(currentPathname) || currentPathname === '/location-setup') {
           console.log('Layout: Logged in and location set. Redirecting to /posts.');
           await goto('/posts', { replaceState: true });
         }

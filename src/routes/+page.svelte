@@ -1,98 +1,87 @@
 <script>
     import { onMount } from 'svelte';
     import { browser } from '$app/environment';
+    import { goto } from '$app/navigation';
+    import { auth } from '$lib/stores';
     
-    let currentUrl = '';
-    let hostname = '';
-    let protocol = '';
+    let isLoggedIn = false;
+    let isLoading = true;
     
-    onMount(() => {
+    onMount(async () => {
         if (browser) {
-            currentUrl = window.location.href;
-            hostname = window.location.hostname;
-            protocol = window.location.protocol;
+            // Subscribe to auth state
+            const unsubscribe = auth.subscribe(value => {
+                isLoggedIn = value.isLoggedIn;
+                isLoading = false;
+                
+                // Redirect based on auth state
+                if (!isLoading) {
+                    if (isLoggedIn) {
+                        // User is logged in, redirect to posts
+                        goto('/posts', { replaceState: true });
+                    } else {
+                        // User is not logged in, redirect to login
+                        goto('/login', { replaceState: true });
+                    }
+                }
+            });
+            
+            // Cleanup subscription on component destroy
+            return unsubscribe;
         }
     });
 </script>
 
-<div class="minimal-test">
-    <h1>Apexmoo - Domain Routing Test</h1>
-    <p>This is a minimal homepage to test domain routing without redirects.</p>
-    
-    <div class="info-box">
-        <h2>Current URL Information:</h2>
-        <p><strong>Full URL:</strong> {currentUrl}</p>
-        <p><strong>Hostname:</strong> {hostname}</p>
-        <p><strong>Protocol:</strong> {protocol}</p>
-        <p><strong>Timestamp:</strong> {new Date().toISOString()}</p>
+{#if isLoading}
+    <div class="loading-container">
+        <div class="spinner"></div>
+        <p>Loading...</p>
     </div>
-    
-    <div class="success-box">
-        <h3>✅ Domain Routing Working!</h3>
-        <p>If you can see this page, the redirect loop issue has been resolved.</p>
+{:else if !isLoggedIn}
+    <div class="redirect-notice">
+        <h1>Welcome to Apexmoo</h1>
+        <p>Redirecting to login...</p>
     </div>
-    
-    <div class="links">
-        <h3>Test Links:</h3>
-        <a href="/test">Visit Test Page</a>
-        <a href="/login">Visit Login Page</a>
+{:else}
+    <div class="redirect-notice">
+        <h1>Welcome back!</h1>
+        <p>Redirecting to your dashboard...</p>
     </div>
-</div>
+{/if}
 
 <style>
-    .minimal-test {
-        max-width: 800px;
-        margin: 0 auto;
-        padding: 2rem;
+    .loading-container,
+    .redirect-notice {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        justify-content: center;
+        min-height: 100vh;
         font-family: Arial, sans-serif;
+    }
+    
+    .spinner {
+        border: 6px solid #eee;
+        border-top: 6px solid #333;
+        border-radius: 50%;
+        width: 48px;
+        height: 48px;
+        animation: spin 0.8s linear infinite;
+        margin-bottom: 1em;
+    }
+    
+    @keyframes spin {
+        0% { transform: rotate(0deg); }
+        100% { transform: rotate(360deg); }
     }
     
     h1 {
         color: #333;
-        text-align: center;
-        margin-bottom: 2rem;
+        margin-bottom: 1rem;
     }
     
-    .info-box {
-        background: #f5f5f5;
-        border: 1px solid #ddd;
-        border-radius: 8px;
-        padding: 1.5rem;
-        margin: 2rem 0;
-    }
-    
-    .success-box {
-        background: #d4edda;
-        border: 1px solid #c3e6cb;
-        border-radius: 8px;
-        padding: 1.5rem;
-        margin: 2rem 0;
-    }
-    
-    .success-box h3 {
-        color: #155724;
-        margin-top: 0;
-    }
-    
-    .links {
-        background: #e7f3ff;
-        border: 1px solid #b8daff;
-        border-radius: 8px;
-        padding: 1.5rem;
-        margin: 2rem 0;
-    }
-    
-    .links a {
-        display: inline-block;
-        margin: 0.5rem 1rem 0.5rem 0;
-        padding: 0.5rem 1rem;
-        background: #007bff;
-        color: white;
-        text-decoration: none;
-        border-radius: 4px;
-    }
-    
-    .links a:hover {
-        background: #0056b3;
+    p {
+        color: #666;
+        font-size: 1.1em;
     }
 </style>
