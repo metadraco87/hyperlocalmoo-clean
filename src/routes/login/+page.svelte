@@ -48,8 +48,20 @@
 
     function handleOAuthLogin(provider) {
         if (!browser) return;
+        
+        const oauthUrl = `${PUBLIC_API_BASE_URL}/auth/google`;
+        
+        // Log OAuth redirect for debugging
+        console.log('🔍 FRONTEND OAUTH AUDIT:', {
+            provider: provider,
+            apiBaseUrl: PUBLIC_API_BASE_URL,
+            oauthUrl: oauthUrl,
+            expectedCallbackUrl: 'https://apexmoo.com/auth/google/callback',
+            timestamp: new Date().toISOString()
+        });
+        
         if (provider === 'google') {
-            window.location.href = `${PUBLIC_API_BASE_URL}/auth/google`;
+            window.location.href = oauthUrl;
         } else {
             window.location.href = `${PUBLIC_API_BASE_URL}/auth/${provider}`;
         }
