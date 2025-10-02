@@ -107,16 +107,17 @@ export const handle: Handle = async ({ event, resolve }) => {
         const isDev = process.env.NODE_ENV !== 'production';
         const csp = [
             isDev ? "default-src 'self' data: blob: https:;" : "default-src 'self';",
-            "script-src 'self' https://maps.googleapis.com https://maps.gstatic.com https://cdnjs.cloudflare.com https://pagead2.googlesyndication.com 'unsafe-inline' 'unsafe-eval';",
-            "style-src 'self' 'unsafe-inline' https://cdnjs.cloudflare.com https://fonts.googleapis.com;",
-            "img-src 'self' data: blob: https://*.amazonaws.com https://*.peakpx.com https://maps.gstatic.com https://maps.googleapis.com https://wallpapers.com https://*.wallpapers.com https://unsplash.com https://*.unsplash.com https://pexels.com https://*.pexels.com https://imgur.com https://*.imgur.com https://flickr.com https://*.flickr.com https://*.staticflickr.com https://pinterest.com https://*.pinterest.com https://*.pinimg.com https://google.com https://*.google.com https://*.googleusercontent.com https://*.ggpht.com https://images.unsplash.com https://i.imgur.com https:;",
-            "font-src 'self' https://cdnjs.cloudflare.com https://fonts.gstatic.com;",
+            "script-src 'self' https://maps.googleapis.com https://maps.gstatic.com https://cdnjs.cloudflare.com https://pagead2.googlesyndication.com https://www.googletagservices.com https://www.google.com https://www.google-analytics.com https://google-analytics.com https://googletagmanager.com 'unsafe-inline' 'unsafe-eval';",
+            "style-src 'self' 'unsafe-inline' https://cdnjs.cloudflare.com https://fonts.googleapis.com https://www.google.com;",
+            "img-src 'self' data: blob: https://*.amazonaws.com https://*.peakpx.com https://maps.gstatic.com https://maps.googleapis.com https://wallpapers.com https://*.wallpapers.com https://unsplash.com https://*.unsplash.com https://pexels.com https://*.pexels.com https://imgur.com https://*.imgur.com https://flickr.com https://*.flickr.com https://*.staticflickr.com https://pinterest.com https://*.pinterest.com https://*.pinimg.com https://google.com https://*.google.com https://*.googleusercontent.com https://*.ggpht.com https://images.unsplash.com https://i.imgur.com https://tpc.googlesyndication.com https://www.google.com https://pagead2.googlesyndication.com https:;",
+            "font-src 'self' https://cdnjs.cloudflare.com https://fonts.gstatic.com https://www.google.com;",
             isDev
                 ? "connect-src * data: blob:;"
-                : "connect-src 'self' http://localhost:4000 ws://localhost:4000 https://apexmoo.com https://maps.googleapis.com https://maps.gstatic.com https://places.googleapis.com https://*.googleapis.com https://*.google.com;",
-            "frame-src 'self';",
+                : "connect-src 'self' http://localhost:4000 ws://localhost:4000 https://apexmoo.com https://maps.googleapis.com https://maps.gstatic.com https://places.googleapis.com https://*.googleapis.com https://*.google.com https://www.google-analytics.com https://google-analytics.com https://googletagmanager.com https://pagead2.googlesyndication.com https://www.googletagservices.com;",
+            "frame-src 'self' https://googleads.g.doubleclick.net https://tpc.googlesyndication.com https://www.google.com https://pagead2.googlesyndication.com;",
             "object-src 'none';",
-            "media-src 'self' data: blob: https://*.amazonaws.com https://wallpapers.com https://*.wallpapers.com https://unsplash.com https://*.unsplash.com https://pexels.com https://*.pexels.com https://imgur.com https://*.imgur.com https://flickr.com https://*.flickr.com https://*.staticflickr.com https://pinterest.com https://*.pinterest.com https://*.pinimg.com https://google.com https://*.google.com https://*.googleusercontent.com https://*.ggpht.com https:;"
+            "media-src 'self' data: blob: https://*.amazonaws.com https://wallpapers.com https://*.wallpapers.com https://unsplash.com https://*.unsplash.com https://pexels.com https://*.pexels.com https://imgur.com https://*.imgur.com https://flickr.com https://*.flickr.com https://*.staticflickr.com https://pinterest.com https://*.pinterest.com https://*.pinimg.com https://google.com https://*.google.com https://*.googleusercontent.com https://*.ggpht.com https:;",
+            "report-uri /api/csp-violation-report;"
         ].join(' ');
     
         response.headers.set('Content-Security-Policy', csp);
