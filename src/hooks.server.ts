@@ -107,7 +107,7 @@ export const handle: Handle = async ({ event, resolve }) => {
         const isDev = process.env.NODE_ENV !== 'production';
         const csp = [
             isDev ? "default-src 'self' data: blob: https:;" : "default-src 'self';",
-            "script-src 'self' https://maps.googleapis.com https://maps.gstatic.com https://cdnjs.cloudflare.com 'unsafe-inline' 'unsafe-eval';",
+            "script-src 'self' https://maps.googleapis.com https://maps.gstatic.com https://cdnjs.cloudflare.com https://pagead2.googlesyndication.com 'unsafe-inline' 'unsafe-eval';",
             "style-src 'self' 'unsafe-inline' https://cdnjs.cloudflare.com https://fonts.googleapis.com;",
             "img-src 'self' data: blob: https://*.amazonaws.com https://*.peakpx.com https://maps.gstatic.com https://maps.googleapis.com https://wallpapers.com https://*.wallpapers.com https://unsplash.com https://*.unsplash.com https://pexels.com https://*.pexels.com https://imgur.com https://*.imgur.com https://flickr.com https://*.flickr.com https://*.staticflickr.com https://pinterest.com https://*.pinterest.com https://*.pinimg.com https://google.com https://*.google.com https://*.googleusercontent.com https://*.ggpht.com https://images.unsplash.com https://i.imgur.com https:;",
             "font-src 'self' https://cdnjs.cloudflare.com https://fonts.gstatic.com;",
