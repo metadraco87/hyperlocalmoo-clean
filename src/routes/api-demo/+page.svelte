@@ -11,7 +11,7 @@
         error = null;
         
         try {
-            const response = await fetch('https://apexmoo.com/', {
+            const response = await fetch('https://api.apexmoo.com/', {
                 method: 'GET',
                 headers: {
                     'Accept': 'application/json',

@@ -35,7 +35,7 @@
   <div class="instructions">
     <h3>Testing Instructions:</h3>
     <ul>
-      <li>Visit <code>https://apexmoo.com/test</code></li>
+      <li>Visit <code>https://api.apexmoo.com/test</code></li>
       <li>Visit <code>https://www.apexmoo.com/test</code></li>
       <li>Both should load this page without redirects</li>
       <li>Check that the hostname shows correctly in the info above</li>

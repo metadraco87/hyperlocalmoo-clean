@@ -3,7 +3,16 @@
     import { goto } from '$app/navigation';
     import { browser } from '$app/environment';
     import { env } from '$env/dynamic/public';
-    const PUBLIC_API_BASE_URL = env.PUBLIC_API_BASE_URL || 'http://localhost:4000';
+    const PUBLIC_API_BASE_URL = env.PUBLIC_API_BASE_URL || 'https://api.apexmoo.com';
+    
+    // Ensure consistent domain usage
+    let apiBaseUrl = PUBLIC_API_BASE_URL;
+    if (browser) {
+        const currentOrigin = window.location.origin;
+        if (currentOrigin === 'https://www.apexmoo.com') {
+            apiBaseUrl = 'https://api.apexmoo.com'; // API Gateway is on api.apexmoo.com
+        }
+    }
 
     export let params;
     
@@ -49,21 +58,23 @@
     function handleOAuthLogin(provider) {
         if (!browser) return;
         
-        const oauthUrl = `${PUBLIC_API_BASE_URL}/auth/google`;
+        const oauthUrl = `${apiBaseUrl}/auth/google`;
         
         // Log OAuth redirect for debugging
         console.log('🔍 FRONTEND OAUTH AUDIT:', {
             provider: provider,
-            apiBaseUrl: PUBLIC_API_BASE_URL,
+            apiBaseUrl: apiBaseUrl,
+            publicApiBaseUrl: PUBLIC_API_BASE_URL,
             oauthUrl: oauthUrl,
-            expectedCallbackUrl: 'https://apexmoo.com/auth/google/callback',
+            currentDomain: window.location.origin,
+            expectedCallbackUrl: 'https://api.apexmoo.com/auth/google/callback',
             timestamp: new Date().toISOString()
         });
         
         if (provider === 'google') {
             window.location.href = oauthUrl;
         } else {
-            window.location.href = `${PUBLIC_API_BASE_URL}/auth/${provider}`;
+            window.location.href = `${apiBaseUrl}/auth/${provider}`;
         }
     }
 </script>

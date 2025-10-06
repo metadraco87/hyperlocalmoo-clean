@@ -31,11 +31,12 @@ const config = {
           'https://googleads.g.doubleclick.net',
           'https://tpc.googlesyndication.com',
           'https://www.google.com',
-          'https://pagead2.googlesyndication.com'
+          'https://pagead2.googlesyndication.com',
+          'https://ep2.adtrafficquality.google'
         ],
         'connect-src': [
           'self',
-          'https://apexmoo.com',
+          'https://api.apexmoo.com',
           'https://maps.googleapis.com',
           'https://maps.gstatic.com',
           'https://places.googleapis.com',

@@ -1,0 +1,2 @@
+/*
+  Content-Security-Policy: default-src 'self'; frame-src 'self' https://googleads.g.doubleclick.net https://tpc.googlesyndication.com https://www.google.com https://pagead2.googlesyndication.com https://ep2.adtrafficquality.google; connect-src 'self' https://api.apexmoo.com;

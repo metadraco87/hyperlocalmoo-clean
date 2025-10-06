@@ -4,7 +4,7 @@
  */
 
 // You can adjust the base URL as needed
-const API_BASE_URL = 'https://apexmoo.com';
+const API_BASE_URL = 'https://api.apexmoo.com';
 
 // Response types
 export interface ApiResponse<T> {

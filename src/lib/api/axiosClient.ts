@@ -7,7 +7,7 @@ import type { AxiosInstance, AxiosRequestConfig, AxiosResponse } from 'axios';
 
 // Create a base axios instance
 const apiClient: AxiosInstance = axios.create({
-    baseURL: 'https://apexmoo.com',
+    baseURL: 'https://api.apexmoo.com',
     headers: {
         'Accept': 'application/json',
         'Content-Type': 'application/json'

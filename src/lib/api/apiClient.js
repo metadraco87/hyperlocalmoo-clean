@@ -4,7 +4,7 @@
  */
 
 // You can adjust the base URL as needed
-const API_BASE_URL = 'https://apexmoo.com';
+const API_BASE_URL = 'https://api.apexmoo.com';
 
 // Optional: Get token from local storage or other auth mechanism
 const getAuthToken = () => {
